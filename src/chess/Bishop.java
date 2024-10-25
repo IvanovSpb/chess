@@ -10,7 +10,7 @@ public class Bishop extends LongRangePiece implements IBishop {
     }
 
     @Override
-    protected Set<CoordinatesShift> getPiceMoves() {
+    protected Set<CoordinatesShift> getPieceMoves() {
         // bottom-left to top-right
         return getBishopMoves();
     }

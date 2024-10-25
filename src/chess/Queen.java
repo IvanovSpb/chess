@@ -10,7 +10,7 @@ public class Queen extends LongRangePiece implements IBishop, IRook {
     }
 
     @Override
-    protected Set<CoordinatesShift> getPiceMoves() {
+    protected Set<CoordinatesShift> getPieceMoves() {
         Set<CoordinatesShift> moves = getBishopMoves();
         moves.addAll(getRookMoves());
         return moves;

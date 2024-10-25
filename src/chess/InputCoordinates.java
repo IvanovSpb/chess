@@ -69,12 +69,12 @@ public class InputCoordinates {
         }
     }
 
-    public static Coordinates inputAvailableSquare(Set<Coordinates> coordinates){
-        while (true){
+    public static Coordinates inputAvailableSquare(Set<Coordinates> coordinates) {
+        while (true) {
             System.out.println("Enter your move for selected piece");
             Coordinates input = input();
 
-            if (!coordinates.contains(input)){
+            if (!coordinates.contains(input)) {
                 System.out.println("Non-available squere");
                 continue;
             }
@@ -82,11 +82,35 @@ public class InputCoordinates {
         }
     }
 
-    public static void main(String[] args) {
-        Board board = new Board();
-        board.setupDefaultPiecesPositions();
-        Coordinates coordinates = inputPieceCoordinatesForColor(Color.WHITE, board);
-        System.out.println(coordinates);
+    public static Move inputMove(Board board, Color color, BoardConsoleRenderer renderer) {
+        //input
+        while (true) {
+            Coordinates sourceCoordinates = InputCoordinates.inputPieceCoordinatesForColor(
+                    color, board
+            );
+            Piece piece = board.getPiece(sourceCoordinates);
+            Set<Coordinates> availableMoveSquares = piece.getAvailableMoveSquares(board);
 
+            renderer.render(board, piece);
+            Coordinates targetCoordinates = InputCoordinates.inputAvailableSquare(availableMoveSquares);
+
+            Move move = new Move(sourceCoordinates, targetCoordinates);
+
+            if (validateIfKingInCheckAfterMove(board, color, move)) {
+                System.out.println("Your king is under attack!");
+                continue;
+            }
+            return move;
+        }
+
+    }
+
+    private static boolean validateIfKingInCheckAfterMove(Board board, Color color, Move move) {
+        Board copy = (new BoardFactory().copy(board));
+        copy.makeMove(move);
+        //Допущение, что король есть на доске
+
+        Piece king = copy.getPiecesByColor(color).stream().filter(piece -> piece instanceof King).findFirst().get();
+        return copy.isSquareAttackedByColor(king.coordinates, color.opposite());
     }
 }

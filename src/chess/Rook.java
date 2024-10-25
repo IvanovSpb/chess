@@ -11,7 +11,7 @@ public class Rook extends LongRangePiece implements IRook {
     }
 
     @Override
-    protected Set<CoordinatesShift> getPiceMoves() {
+    protected Set<CoordinatesShift> getPieceMoves() {
         return getRookMoves();
     }
 
